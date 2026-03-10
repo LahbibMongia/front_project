@@ -14,14 +14,18 @@ export default function Landing() {
         <div className="relative pt-16 pb-32 flex content-center items-center justify-center min-h-screen-75">
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80')",
-            }}
+            
           >
+            <div className="absolute inset-0">
+              <img
+                alt="..."
+                src={require("assets/img/landingg.png").default}
+                className="w-full h-full object-cover"
+              />
+            </div>
             <span
-              id="blackOverlay"
-              className="w-full h-full absolute opacity-75 bg-black"
+              id="whiteOverlay"
+              className="w-full h-full absolute opacity-75 bg-white"
             ></span>
           </div>
           <div className="container relative mx-auto">
