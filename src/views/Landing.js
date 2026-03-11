@@ -25,7 +25,7 @@ export default function Landing() {
             </div>
             <span
               id="whiteOverlay"
-              className="w-full h-full absolute opacity-75 bg-white"
+              className="w-full h-full absolute opacity-50 bg-white"
             ></span>
           </div>
           <div className="container relative mx-auto">

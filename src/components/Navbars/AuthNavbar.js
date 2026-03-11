@@ -14,11 +14,25 @@ export default function Navbar(props) {
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link
-              className="text-black text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
+              className="text-black text-sm font-bold leading-relaxed flex items-center mr-4 py-2 whitespace-nowrap uppercase"
               to="/"
             >
-              KidOra
+              {/* Logo first (Left) */}
+              <img
+                alt="KidOra Logo"
+                src={require("assets/img/logo.png").default}
+                className="w-10 h-10 mr-2 object-contain"
+              />
+              {/* Text second (Right) */}
+                 <div 
+                          className="text-2xl font-bold mt-1 tracking-tight" 
+                          style={{ fontFamily: "'Quicksand', sans-serif" }}
+                        >
+                          <span style={{ color: "#2D4F4F" }}>Kid</span> 
+                          <span style={{ color: "#EC774F" }}>Ora</span>
+                        </div>
             </Link>
+            
             <button
               className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
               type="button"

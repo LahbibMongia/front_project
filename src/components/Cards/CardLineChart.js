@@ -18,8 +18,8 @@ export default function CardLineChart() {
         datasets: [
           {
             label: new Date().getFullYear(),
-            backgroundColor: "#4c51bf",
-            borderColor: "#4c51bf",
+            backgroundColor: "#EC774F",
+            borderColor: "#EC774F",
             data: [65, 78, 66, 44, 56, 67, 75],
             fill: false,
           },
