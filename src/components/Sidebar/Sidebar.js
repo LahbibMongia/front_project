@@ -29,7 +29,7 @@ export default function Sidebar() {
               <img
                 alt="KidOra Logo"
                 src={require("assets/img/logo.png").default} 
-                className="w-15 h-15 mr-3 object-contain" 
+                className="w-10 h-10 mr-3 object-contain" 
               />
               <span className="text-xl">KidOra</span>
             </div>
