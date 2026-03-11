@@ -337,7 +337,7 @@ export default function Index() {
               <div className="flex flex-wrap">
                 <div className="w-full lg:w-4/12 px-4">
                   <h5 className="text-xl font-semibold pb-4 text-center">
-                    Your perfect Nanny is just a click away ! 
+                    Your perfect Nanny is a click away ! 
                   </h5>
                   <Link to="/auth/login">
                     <div className="hover:-mt-4 relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
@@ -402,16 +402,11 @@ export default function Index() {
                   className="text-blueGray-300"
                   target="_blank"
                 >
-                  Tailwind CSS
+                  KidOra
                 </a>{" "}
-                is an open source project we wanted to continue this movement
-                too. You can give this version a try to feel the design and also
-                test the quality of the code!
+                The first babysitting platform using advanced AI to match your family's unique needs with the most experienced, trusted sitters in your area.
               </p>
-              <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-blueGray-400">
-                Get it free on Github and please help us spread the news with a
-                Star!
-              </p>
+              
               <a
                 href="https://github.com/creativetimofficial/notus-react?ref=nr-index"
                 target="_blank"
