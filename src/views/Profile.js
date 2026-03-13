@@ -1,141 +1,254 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
 
+const getStatusStyle = (status) => {
+  const styles = {
+    pending: "bg-yellow-100 text-yellow-800",
+    confirmed: "bg-green-100 text-green-800",
+    cancelled: "bg-red-100 text-red-800",
+    finished: "bg-blueGray-100 text-blueGray-700"
+  };
+
+  return styles[status.toLowerCase()] || "bg-blueGray-100 text-blueGray-700";
+
+};
+
 export default function Profile() {
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    // TODO: Connect to backend. E.g., fetch('/api/reservations').then(res => res.json()).then(data => setReservations(data))
+    const fetchReservations = async () => {
+      try {
+        // Simulating an API call with mocked data
+        const mockBackendData = [
+          {
+            id: 1,
+            sitterName: "Emily Chen",
+            dateTime: "Friday, Oct 24 • 6:00 PM - 10:00 PM",
+            status: "Confirmed",
+            imgSrc: require("assets/img/team-3-800x800.jpg").default
+          },
+          {
+            id: 2,
+            sitterName: "Michael Scott",
+            dateTime: "Tuesday, Oct 28 • 3:00 PM - 6:00 PM",
+            status: "Pending",
+            imgSrc: require("assets/img/team-1-800x800.jpg").default
+          }
+        ];
+        
+        setReservations(mockBackendData);
+      } catch (error) {
+        console.error("Failed to fetch reservations from the backend", error);
+      }
+    };
+
+    fetchReservations();
+  }, []);
+
   return (
+
+    
     <>
+      <style>{`
+        .hover-scale-102 {
+          display: inline-block;
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-scale-102:hover {
+          transform: scale(1.02);
+        }
+      `}</style>
       <Navbar transparent />
-      <main className="profile-page">
-        <section className="relative block h-500-px">
-          <div
-            className="absolute top-0 w-full h-full bg-center bg-cover"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80')",
-            }}
-          >
-            <span
-              id="blackOverlay"
-              className="w-full h-full absolute opacity-50 bg-black"
-            ></span>
-          </div>
-          <div
-            className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
-            style={{ transform: "translateZ(0)" }}
-          >
-            <svg
-              className="absolute bottom-0 overflow-hidden"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              version="1.1"
-              viewBox="0 0 2560 100"
-              x="0"
-              y="0"
-            >
-              <polygon
-                className="text-blueGray-200 fill-current"
-                points="2560 0 2560 100 0 100"
-              ></polygon>
-            </svg>
-          </div>
-        </section>
-        <section className="relative py-16 bg-blueGray-200">
-          <div className="container mx-auto px-4">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
-              <div className="px-6">
-                <div className="flex flex-wrap justify-center">
-                  <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                    <div className="relative">
-                      <img
-                        alt="..."
-                        src={require("assets/img/team-2-800x800.jpg").default}
-                        className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                      />
-                    </div>
+      <div className="bg-blueGray-50 min-h-screen pb-16 pt-24">
+        {/* Header & Navigation */}
+        <header className="shadow-sm py-4 px-6 mb-8 mt-0 w-full flex justify-between items-center relative z-10" style={{ borderRadius: "0 0 10px 10px" }}>
+  <div className="container mx-auto max-w-4xl flex justify-end items-center gap-12">
+    
+    {/* Search Bar */}
+    <div className="relative w-72 shrink-0">
+      <span className="z-10 h-full font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-xs items-center justify-center w-10 flex">
+        <i className="fas fa-search"></i>
+      </span>
+      <input
+        type="text"
+        placeholder="Find a babysitter"
+        className="border border-blueGray-200 px-3 py-2 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-xs shadow-sm outline-none focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 w-full pl-10 transition-colors"
+        style={{ borderRadius: "10px" }}
+      />
+    </div>
+
+    {/* Notification & Action Button Container */}
+    <div className="flex items-center gap-8">
+      <button className="text-blueGray-400 hover:text-blueGray-600 transition-colors w-8 h-8 flex items-center justify-center outline-none focus:outline-none shrink-0 relative">
+        <i className="fas fa-bell text-base absolute"></i>
+      </button>
+
+      <button className="hover-scale-102 bg-blueGray-800 text-white active:bg-blueGray-900 font-bold uppercase text-xs px-6 py-2 shadow hover:shadow-md outline-none focus:outline-none shrink-0" style={{ borderRadius: "8px" }}>
+        Book a Sitter
+      </button>
+    </div>
+
+  </div>
+</header>
+
+        <main className="container mx-auto px-4 max-w-4xl flex flex-col gap-100">
+          
+          {/* Main Profile Card (Household Section) */}
+          <div className="bg-white shadow-lg p-6 sm:p-8" style={{ borderRadius: "10px" }}>
+            <h2 className="text-xl font-bold text-blueGray-800 mb-6 border-b border-blueGray-100 pb-3 pl-4">Household Profile</h2>
+            
+            <div className="flex flex-col sm:flex-row gap-8 pl-4">
+              {/* Profile Photo & Edit Button */}
+              <div className="flex flex-col items-center sm:items-start flex-shrink-0">
+                <div className="relative mb-4">
+                  <img
+                    alt="Profile Avatar"
+                    src={require("assets/img/team-2-800x800.jpg").default}
+                    className="shadow-md h-20 w-20 object-cover border-none mx-auto"
+                    style={{ borderRadius: "10px" }}
+                  />
+                </div>
+                <button className="text-xs font-bold text-blueGray-500 hover:text-blueGray-800 transition-colors uppercase outline-none focus:outline-none pt-2 text-center w-full sm:text-left">
+                  Edit Photo
+                </button>
+              </div>
+
+              {/* Account Information */}
+              <div className="flex flex-col w-full gap-4 pl-0 sm:pl-4">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-col w-full sm:w-1/2 gap-1">
+                    <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Name</label>
+                    <input 
+                      type="text" 
+                      defaultValue="Jane Doe" 
+                      className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
+                      style={{ borderRadius: "8px" }}
+                    />
                   </div>
-                  <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                    <div className="py-6 px-3 mt-32 sm:mt-0">
-                      <button
-                        className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                      >
-                        Connect
-                      </button>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                      <div className="mr-4 p-3 text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          22
-                        </span>
-                        <span className="text-sm text-blueGray-400">
-                          Friends
-                        </span>
-                      </div>
-                      <div className="mr-4 p-3 text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          10
-                        </span>
-                        <span className="text-sm text-blueGray-400">
-                          Photos
-                        </span>
-                      </div>
-                      <div className="lg:mr-4 p-3 text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          89
-                        </span>
-                        <span className="text-sm text-blueGray-400">
-                          Comments
-                        </span>
-                      </div>
-                    </div>
+                  <div className="flex flex-col w-full sm:w-1/2 gap-1">
+                    <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Email</label>
+                    <input 
+                      type="email" 
+                      defaultValue="jane.doe@example.com" 
+                      className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
+                      style={{ borderRadius: "8px" }}
+                    />
                   </div>
                 </div>
-                <div className="text-center mt-12">
-                  <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                    Jenna Stones
-                  </h3>
-                  <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                    <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-                    Los Angeles, California
-                  </div>
-                  <div className="mb-2 text-blueGray-600 mt-10">
-                    <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                    Solution Manager - Creative Tim Officer
-                  </div>
-                  <div className="mb-2 text-blueGray-600">
-                    <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                    University of Computer Science
-                  </div>
+                <div className="flex flex-col w-full gap-1">
+                  <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Phone</label>
+                  <input 
+                    type="tel" 
+                    defaultValue="(555) 123-4567" 
+                    className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
+                    style={{ borderRadius: "8px" }}
+                  />
                 </div>
-                <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                  <div className="flex flex-wrap justify-center">
-                    <div className="w-full lg:w-9/12 px-4">
-                      <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        An artist of considerable range, Jenna the name taken by
-                        Melbourne-raised, Brooklyn-based Nick Murphy writes,
-                        performs and records all of his own music, giving it a
-                        warm, intimate feel with a solid groove structure. An
-                        artist of considerable range.
-                      </p>
-                      <a
-                        href="#pablo"
-                        className="font-normal text-lightBlue-500"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Show more
-                      </a>
-                    </div>
+
+                <div className="flex flex-col w-full gap-1">
+                  <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Address</label>
+                  <input 
+                    type="address" 
+                    defaultValue="Tunis" 
+                    className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
+                    style={{ borderRadius: "8px" }}
+                  />
+                </div>
+
+                {/* Preferences */}
+                <div className="mt-4">
+                  <p className="text-xs font-bold text-blueGray-400 uppercase tracking-widest mb-3">Preferences</p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="bg-blueGray-100 text-blueGray-700 text-xs font-bold px-4 py-2" style={{ borderRadius: "20px" }}>
+                      Educational games
+                    </span>
+                    <span className="bg-blueGray-100 text-blueGray-700 text-xs font-bold px-4 py-2" style={{ borderRadius: "20px" }}>
+                      Outdoor play
+                    </span>
+                    <span className="bg-blueGray-100 text-blueGray-700 text-xs font-bold px-4 py-2" style={{ borderRadius: "20px" }}>
+                      Arts & Crafts
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </main>
+
+          {/* Children Summary */}
+          <div className="bg-white shadow-lg p-6 sm:p-8" style={{ borderRadius: "10px" }}>
+            <div className="flex justify-between items-center mb-6 border-b border-blueGray-100 pb-3 pl-4 pr-4">
+              <h2 className="text-xl font-bold text-blueGray-800">My Children</h2>
+              <button className="text-sm font-bold text-blueGray-500 hover:text-blueGray-800 transition-colors uppercase outline-none focus:outline-none">
+                + Add Child
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-40">
+              <div className="flex items-center gap-4 p-4 bg-white transition-all duration-200" style={{ borderRadius: "10px", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}>
+                <div className="bg-lightBlue-100 text-lightBlue-600 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0 shadow-sm font-bold text-xl relative">
+                  S
+                </div>
+                <div className="flex flex-col pl-4">
+                  <h4 className="font-bold text-blueGray-800 text-lg mb-0 relative top-1">Sarah</h4>
+                  <p className="text-sm font-semibold text-blueGray-500 relative bottom-1">4 years old</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 p-4 bg-white transition-all duration-200" style={{ borderRadius: "10px", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}>
+                <div className="bg-teal-100 text-teal-600 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0 shadow-sm font-bold text-xl relative">
+                  L
+                </div>
+                <div className="flex flex-col pl-4">
+                  <h4 className="font-bold text-blueGray-800 text-lg mb-0 relative top-1">Leo</h4>
+                  <p className="text-sm font-semibold text-blueGray-500 relative bottom-1">Toddler</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Upcoming Reservations */}
+          <div className="bg-white shadow-lg p-6 sm:p-8" style={{ borderRadius: "10px" }}>
+            <h2 className="text-xl font-bold text-blueGray-800 mb-6 border-b border-blueGray-100 pb-3 pl-4">Upcoming Reservations</h2>
+            
+            <div className="flex flex-col gap-4">
+              {reservations.map((res) => (
+                <div key={res.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-white gap-4" style={{ borderRadius: "10px", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}>
+                  <div className="flex items-center gap-4">
+                    <div className="bg-blueGray-100 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                      <img 
+                        alt="..." src={res.imgSrc} 
+                        className="shadow-md rounded-full h-full w-full object-cover border-none"
+                      />
+                    </div>
+                    <div className="pl-4">
+                      <h4 className="font-bold text-blueGray-800 mb-1">{res.sitterName}</h4>
+                      <p className="text-sm font-semibold text-blueGray-500">
+                        <i className="far fa-calendar-alt mr-2"></i>
+                        {res.dateTime}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-2 ml-auto">
+                    <span
+                      className={`${getStatusStyle(res.status)} text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide self-start sm:self-end`}
+                    >
+                      {res.status}
+                    </span>
+                    <a href="#pablo" onClick={e => e.preventDefault()} className="hover-scale-102 text-sm font-bold text-blueGray-500 hover:text-blueGray-800 uppercase pt-1 inline-block">
+                      View Details
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+          </div>
+
+        </main>
+      </div>
       <Footer />
     </>
   );

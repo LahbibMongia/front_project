@@ -14,6 +14,8 @@ import Auth from "layouts/Auth.js";
 
 import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
+import ProfileBs from "views/auth/Profile-bs.js";
+import EditProfileBs from "views/auth/EditProfile-bs.js"; 
 import Index from "views/Index.js";
 
 ReactDOM.render(
@@ -25,7 +27,9 @@ ReactDOM.render(
       {/* add routes without layouts */}
       <Route path="/landing" exact component={Landing} />
       <Route path="/profile" exact component={Profile} />
-      <Route path="/" exact component={Index} />
+      <Route path="/profile-bs" exact component={ProfileBs} />
+      <Route path="/edit-profile-bs" exact component={EditProfileBs} />
+      <Route path="/  " exact component={Index} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
