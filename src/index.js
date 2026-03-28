@@ -29,7 +29,7 @@ ReactDOM.render(
       <Route path="/profile" exact component={Profile} />
       <Route path="/profile-bs" exact component={ProfileBs} />
       <Route path="/edit-profile-bs" exact component={EditProfileBs} />
-      <Route path="/  " exact component={Index} />
+      <Route path="/" exact component={Index} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
