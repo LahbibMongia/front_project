@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "context/AuthContext.js";
 
 import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
@@ -16,6 +17,7 @@ const getStatusStyle = (status) => {
 };
 
 export default function Profile() {
+  const { user } = useAuth();
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
@@ -124,7 +126,7 @@ export default function Profile() {
                     <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Name</label>
                     <input 
                       type="text" 
-                      defaultValue="Jane Doe" 
+                      defaultValue={user?.name || ""} 
                       className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                       style={{ borderRadius: "8px" }}
                     />
@@ -133,7 +135,7 @@ export default function Profile() {
                     <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Email</label>
                     <input 
                       type="email" 
-                      defaultValue="jane.doe@example.com" 
+                      defaultValue={user?.email || ""} 
                       className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                       style={{ borderRadius: "8px" }}
                     />
@@ -143,7 +145,7 @@ export default function Profile() {
                   <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Phone</label>
                   <input 
                     type="tel" 
-                    defaultValue="(555) 123-4567" 
+                    defaultValue={user?.tel || ""} 
                     className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                     style={{ borderRadius: "8px" }}
                   />
@@ -153,7 +155,7 @@ export default function Profile() {
                   <label className="text-xs font-bold text-blueGray-500 uppercase tracking-wide">Address</label>
                   <input 
                     type="address" 
-                    defaultValue="Tunis" 
+                    defaultValue={user?.adresse || ""} 
                     className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-3 px-4 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                     style={{ borderRadius: "8px" }}
                   />

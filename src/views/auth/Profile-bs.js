@@ -1,13 +1,160 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "context/AuthContext.js";
 import Navbar from "components/Navbars/AuthNavbar";
 import Footer from "components/Footers/Footer";
 
 export default function Profile() {
-    const history = useHistory();
+        const history = useHistory();
+        const { user } = useAuth();
+
+        const [showReservationModal, setShowReservationModal] = useState(false);
+        const [reservationData, setReservationData] = useState({
+        date: "",
+        timeSlot: "",
+        notes: "",
+        children: []
+        });
+        const [successMessage, setSuccessMessage] = useState("");
+
+
+        const handleSubmitReservation = async () => {
+  try {
+    const reservation = {
+      sitterId: "sitter_jenna_456", // dynamic later
+      parentId: user ? user._id : "parent_mark_789",  // from auth
+      date: new Date(reservationData.date),
+      timeSlot: reservationData.timeSlot,
+      notes: reservationData.notes,
+      children: reservationData.children,
+      status: "pending",
+      totalPrice: 80,
+    };
+
+    // API call (adjust URL)
+    await fetch("http://localhost:5000/api/reservations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reservation),
+    });
+
+    setSuccessMessage("Request sent! Babysitter will respond soon.");
+    setShowReservationModal(false);
+  } catch (error) {
+    console.error(error);
+  }
+};
     return (
         <>
             <Navbar transparent />
+            {/* Reservation Modal */}
+            {showReservationModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl p-8 relative animate-fadeIn">
+      {/* Close button */}
+      <button
+        onClick={() => setShowReservationModal(false)}
+        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl"
+      >
+        ×
+      </button>
+
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-center"> Book this Babysitter</h3>
+        <p className="text-sm text-gray-500 text-center">
+          Select a date and describe your needs. The babysitter will respond within 24h.
+        </p>
+
+        <div className="space-y-3">
+          {/* Date */}
+          <input
+            type="date"
+            className="w-full border border-gray-200 focus:border-lightBlue-500 focus:ring-1 focus:ring-lightBlue-500 rounded-lg p-3 outline-none transition"
+            onChange={(e) =>
+              setReservationData({ ...reservationData, date: e.target.value })
+            }
+          />
+
+          {/* Time Slot */}
+          <input
+            type="text"
+            placeholder="Time (e.g. 18:00 - 22:00)"
+            className="w-full border border-gray-200 focus:border-lightBlue-500 focus:ring-1 focus:ring-lightBlue-500 rounded-lg p-3 outline-none transition"
+            onChange={(e) =>
+              setReservationData({ ...reservationData, timeSlot: e.target.value })
+            }
+          />
+
+          {/* Notes */}
+          <textarea
+            placeholder="Describe your needs..."
+            className="w-full border border-gray-200 focus:border-lightBlue-500 focus:ring-1 focus:ring-lightBlue-500 rounded-lg p-3 outline-none transition"
+            onChange={(e) =>
+              setReservationData({ ...reservationData, notes: e.target.value })
+            }
+          />
+
+          {/* Children */}
+          <div>
+            <label className="block font-semibold mb-2">Select Children:</label>
+            <div className="flex flex-wrap gap-2">
+              {["child1", "child2", "More than 2 children"].map((child) => (
+                <label
+                  key={child}
+                  className={`px-3 py-1 rounded-full border cursor-pointer text-sm ${
+                    reservationData.children.includes(child)
+                      ? "bg-lightBlue-500 text-white border-lightBlue-500"
+                      : "bg-gray-100 text-gray-600 border-transparent"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    value={child}
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setReservationData({
+                          ...reservationData,
+                          children: [...reservationData.children, child],
+                        });
+                      } else {
+                        setReservationData({
+                          ...reservationData,
+                          children: reservationData.children.filter((c) => c !== child),
+                        });
+                      }
+                    }}
+                  />
+                  {child}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3 pt-4">
+        <button
+          className="flex-1 bg-red-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition"
+          onClick={() => setShowReservationModal(false)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-lg shadow-md hover:shadow-lg transition"
+          onClick={handleSubmitReservation}
+        >
+          Send Request
+        </button>
+      </div>
+    </div>
+  </div>
+)}
             <main className="profile-page">
                 <section className="relative block h-500-px">
                     <div
@@ -59,11 +206,15 @@ export default function Profile() {
                                     <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-end">
                                         <div className="py-6 px-3 mt-32 sm:mt-0">
                                             <button
-                                                className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                                                className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none"
                                                 type="button"
+                                                onClick={() => setShowReservationModal(true)}
                                             >
-                                                Check Availability
+                                                + Book this babysitter
                                             </button>
+                                            {successMessage && (
+                                                <p className="text-green-600 mt-2">{successMessage}</p>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="w-full lg:w-4/12 px-4 lg:order-1">

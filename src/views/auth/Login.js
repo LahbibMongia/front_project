@@ -1,7 +1,63 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { useAuth } from "context/AuthContext.js";
+import { login as apiLogin } from "service/authService.js";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const history = useHistory();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await apiLogin(email, password);
+      console.log("Response:", response); // <-- Added log
+
+      const token = response.token;
+      const user = response.user;
+      const role = response.role;
+
+      console.log("Token:", token);
+      console.log("User:", user);
+      console.log("Role:", role);
+
+      login(token, user, role);
+      console.log("Context updated"); // <-- Added log
+
+      if (role === "admin") {
+        history.push("/admin/dashboard");
+        console.log("Navigation done (Admin redirect)"); // <-- Added log
+      } else if (role === "babysitter") {
+        history.push("/profile-bs");
+        console.log("Navigation done (Babysitter redirect)"); // <-- Added log
+      } else {
+        history.push("/profile");
+        console.log("Navigation done (Standard redirect)"); // <-- Added log
+      }
+    } catch (err) {
+      console.error("FULL ERROR:");
+      console.error(err);
+
+      if (err.response) {
+        console.error("Backend response:", err.response.data);
+        setError(err.response.data.error);
+      } else {
+        console.error(err.stack);
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -15,7 +71,6 @@ export default function Login() {
                   </h6>
                 </div>
                 <div className="btn-wrapper text-center">
-                  
                   <button
                     className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                     type="button"
@@ -34,7 +89,14 @@ export default function Login() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Or sign in with credentials</small>
                 </div>
-                <form>
+                
+                {error && (
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-xs font-semibold text-center">
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -44,8 +106,11 @@ export default function Login() {
                     </label>
                     <input
                       type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
+                      required
                     />
                   </div>
 
@@ -58,8 +123,11 @@ export default function Login() {
                     </label>
                     <input
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Password"
+                      required
                     />
                   </div>
                   <div>
@@ -78,9 +146,10 @@ export default function Login() {
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      type="submit"
+                      disabled={loading}
                     >
-                      Sign In
+                      {loading ? "Signing In..." : "Sign In"}
                     </button>
                   </div>
                 </form>

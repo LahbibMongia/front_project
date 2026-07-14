@@ -1,8 +1,12 @@
 import React from "react";
 import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
+import { useAuth } from "context/AuthContext.js";
 
 export default function EditProfileBs() {
+  const { user } = useAuth();
+  const firstName = user?.name ? user.name.split(' ')[0] : "";
+  const lastName = user?.name ? user.name.split(' ').slice(1).join(' ') : "";
   return (
     <>
       <Navbar transparent />
@@ -37,14 +41,14 @@ export default function EditProfileBs() {
                     </div>
                 </div>
 
-                <h3 className="text-sm font-bold text-blueGray-400 uppercase tracking-widest mb-6 mt-10 border-b border-blueGray-50 pb-3 pl-4">Personal Information</h3>
+                 <h3 className="text-sm font-bold text-blueGray-400 uppercase tracking-widest mb-6 mt-10 border-b border-blueGray-50 pb-3 pl-4">Personal Information</h3>
               <div className="flex flex-col gap-8 px-4">
                 <div className="flex flex-col sm:flex-row gap-6">
                   <div className="flex flex-col w-full sm:w-1/2 gap-5">
                     <label className="text-xs font-bold text-blueGray-500 tracking-wide">First Name</label>
                     <input 
                       type="text" 
-                      defaultValue="Mayssa" 
+                      defaultValue={firstName} 
                       className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-4 px-6 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                       style={{ borderRadius: "8px" }}
                     />
@@ -53,19 +57,19 @@ export default function EditProfileBs() {
                     <label className="text-xs font-bold text-blueGray-500 tracking-wide">Last Name</label>
                     <input 
                       type="text" 
-                      defaultValue="Hmidi" 
+                      defaultValue={lastName} 
                       className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-4 px-6 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                       style={{ borderRadius: "8px" }}
                     />
                   </div>
                 </div>
-
+ 
                 <div className="flex flex-col sm:flex-row gap-6">
                   <div className="flex flex-col w-full sm:w-1/2 gap-5">
                     <label className="text-xs font-bold text-blueGray-500 tracking-wide">Email</label>
                     <input 
                       type="email" 
-                      defaultValue="mayssa.hmidi@example.com" 
+                      defaultValue={user?.email || ""} 
                       className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-4 px-6 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                       style={{ borderRadius: "8px" }}
                     />
@@ -74,7 +78,7 @@ export default function EditProfileBs() {
                     <label className="text-xs font-bold text-blueGray-500 tracking-wide">Phone Number</label>
                     <input 
                       type="tel" 
-                      defaultValue="+216 22 123 456" 
+                      defaultValue={user?.tel || ""} 
                       className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-4 px-6 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                       style={{ borderRadius: "8px" }}
                     />
@@ -85,7 +89,7 @@ export default function EditProfileBs() {
                   <label className="text-xs font-bold text-blueGray-500 tracking-wide">Location (City)</label>
                   <input 
                     type="text" 
-                    defaultValue="Tunis" 
+                    defaultValue={user?.adresse || ""} 
                     className="appearance-none block w-full bg-white text-blueGray-800 border border-blueGray-200 py-4 px-6 text-sm focus:outline-none focus:border-blueGray-800 focus:ring-1 focus:ring-blueGray-800 shadow-sm transition-colors" 
                     style={{ borderRadius: "8px" }}
                   />

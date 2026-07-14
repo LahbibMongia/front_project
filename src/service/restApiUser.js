@@ -13,3 +13,23 @@ export async function getAllUsers() {
 export async function deleteUser(id) {
     return await axios.delete(`${API_URL}/DeleteUser/${id}`);  
 }
+
+export async function addUser(userData) {
+    return await axios.post(`${API_URL}/addUser`, userData);  
+}
+
+export async function updateUser(id, userData) {
+    return await axios.put(`${API_URL}/updateUser/${id}`, userData);  
+}
+
+export async function getUserById(id) {
+    return await axios.get(`${API_URL}/getUserById/${id}`);  
+}
+
+export async function searchUsers(search) {
+    return await axios.get(`${API_URL}/searchUsers/${search}`);  
+}
+
+/*export async function filterUsersByRole(role) {
+    return await axios.get(`${API_URL}/filterUsersByRole/${role}`);  
+}*/
