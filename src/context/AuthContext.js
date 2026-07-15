@@ -17,7 +17,12 @@ export const AuthProvider = ({ children }) => {
     if (storedToken && storedUser) {
       setTokenState(storedToken);
       try {
-        setUserState(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        // Ensure _id exists if id is present
+        if (parsedUser && !parsedUser._id && parsedUser.id) {
+          parsedUser._id = parsedUser.id;
+        }
+        setUserState(parsedUser);
       } catch (e) {
         console.error("Failed to parse user info from localStorage", e);
         // Clean up invalid session data
@@ -37,12 +42,18 @@ export const AuthProvider = ({ children }) => {
    * Log in user by saving credentials in state and localStorage.
    */
   const login = (newToken, newUser, newRole) => {
+    // Ensure _id is present on the user object
+    const sanitizedUser = newUser ? { ...newUser } : null;
+    if (sanitizedUser && !sanitizedUser._id && sanitizedUser.id) {
+      sanitizedUser._id = sanitizedUser.id;
+    }
+
     localStorage.setItem("token", newToken);
-    localStorage.setItem("user", JSON.stringify(newUser));
+    localStorage.setItem("user", JSON.stringify(sanitizedUser));
     localStorage.setItem("role", newRole || "");
     
     setTokenState(newToken);
-    setUserState(newUser);
+    setUserState(sanitizedUser);
     setRoleState(newRole || "");
   };
 
@@ -63,11 +74,17 @@ export const AuthProvider = ({ children }) => {
    * Update the logged in user details dynamically.
    */
   const setUser = (updatedUser) => {
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    setUserState(updatedUser);
-    if (updatedUser && updatedUser.role) {
-      localStorage.setItem("role", updatedUser.role);
-      setRoleState(updatedUser.role);
+    // Ensure _id is present on the user object
+    const sanitizedUser = updatedUser ? { ...updatedUser } : null;
+    if (sanitizedUser && !sanitizedUser._id && sanitizedUser.id) {
+      sanitizedUser._id = sanitizedUser.id;
+    }
+
+    localStorage.setItem("user", JSON.stringify(sanitizedUser));
+    setUserState(sanitizedUser);
+    if (sanitizedUser && sanitizedUser.role) {
+      localStorage.setItem("role", sanitizedUser.role);
+      setRoleState(sanitizedUser.role);
     }
   };
 
@@ -76,7 +93,8 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user, // Retained for backwards compatibility
+        currentUser: user, // Exposing currentUser as requested
         token,
         role,
         isAuthenticated,
