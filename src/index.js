@@ -10,6 +10,7 @@ import "assets/styles/tailwind.css";
 import { AuthProvider } from "context/AuthContext.js";
 import ProtectedRoute from "components/ProtectedRoute.js";
 
+
 // layouts
 import Admin from "layouts/Admin.js";
 import Auth from "layouts/Auth.js";
@@ -18,8 +19,9 @@ import Auth from "layouts/Auth.js";
 import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import ProfileBs from "views/auth/Profile-bs.js";
-import EditProfileBs from "views/auth/EditProfile-bs.js"; 
+import EditProfileBs from "views/auth/booking.js"; 
 import Index from "views/Index.js";
+import Booking from "views/auth/booking.js";
 
 // Configure Axios Request Interceptor
 axios.interceptors.request.use(
@@ -55,6 +57,7 @@ ReactDOM.render(
       <Switch>
         {/* add routes with layouts */}
         <ProtectedRoute path="/admin" component={Admin} adminOnly />
+        <Route path="/auth/booking" exact component={Booking} />
         <Route path="/auth" component={Auth} />
         {/* add routes without layouts */}
         <Route path="/landing" exact component={Landing} />

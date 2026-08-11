@@ -1,35 +1,55 @@
-import axios from "axios";
-const API_URL = "http://localhost:5000/users";
+import API from "./api";
 
-//http://localhost:5000
+/**
+ * Retrieves all users from the system.
+ * @GET /users/GetAllUsers
+ */
+export const getAllUsers = () => {
+  return API.get("/users/GetAllUsers");
+};
 
-//http:localhost:5000/Users gestion des utilisateurs
-//http:localhost:5000/reservations gestion des reservations
+/**
+ * Removes a user by their unique ID.
+ * @DELETE /users/DeleteUser/:id
+ */
+export const deleteUser = (id) => {
+  return API.delete(`/users/DeleteUser/${id}`);
+};
 
-export async function getAllUsers() {
-    return await axios.get(`${API_URL}/GetAllUsers`);  
-}
+/**
+ * Registers/Adds a new user to the database.
+ * @POST /users/addUser
+ */
+export const addUser = (userData) => {
+  return API.post("/users/addUser", userData);
+};
 
-export async function deleteUser(id) {
-    return await axios.delete(`${API_URL}/DeleteUser/${id}`);  
-}
+/**
+ * Updates an existing user's details.
+ * @PUT /users/updateUser/:id
+ */
+export const updateUser = (id, userData) => {
+  return API.put(`/users/updateUser/${id}`, userData);
+};
 
-export async function addUser(userData) {
-    return await axios.post(`${API_URL}/addUser`, userData);  
-}
+/**
+ * Fetches a single user's detailed profile.
+ * @GET /users/getUserById/:id
+ */
+export const getUserById = (id) => {
+  return API.get(`/users/getUserById/${id}`);
+};
 
-export async function updateUser(id, userData) {
-    return await axios.put(`${API_URL}/updateUser/${id}`, userData);  
-}
+/**
+ * Searches for users matching a specific keyword or term.
+ * @GET /users/searchUsers/:search
+ */
+export const searchUsers = (search) => {
+  return API.get(`/users/searchUsers/${search}`);
+};
 
-export async function getUserById(id) {
-    return await axios.get(`${API_URL}/getUserById/${id}`);  
-}
-
-export async function searchUsers(search) {
-    return await axios.get(`${API_URL}/searchUsers/${search}`);  
-}
-
-/*export async function filterUsersByRole(role) {
-    return await axios.get(`${API_URL}/filterUsersByRole/${role}`);  
-}*/
+/*
+export const filterUsersByRole = (role) => {
+  return API.get(`/users/filterUsersByRole/${role}`);
+};
+*/

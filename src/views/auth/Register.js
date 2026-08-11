@@ -205,7 +205,7 @@ export default function Register() {
                       value={formData.name}
                       onChange={handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="John Doe"
+                      placeholder="Name"
                       required
                     />
                   </div>
@@ -250,6 +250,7 @@ export default function Register() {
                     <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
+                      name="password"
                       value={formData.password}
                       onChange={handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full pr-12"
